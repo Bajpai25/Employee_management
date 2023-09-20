@@ -1,0 +1,86 @@
+## Deploying a Node.js Application on AWS EC2 (Windows)
+
+This guide will walk you through the process of deploying your Vite.js application on an AWS EC2 instance running Windows. We will cover setting up the instance, configuring it, and deploying your application.
+
+## Prerequisites
+
+Before you begin, make sure you have the following:
+
+- An AWS account with access to EC2 instances.
+- Your Node.js application code ready for deployment.
+- It should be pushed to github separately.
+
+## Step 1: Launch an AWS EC2 Instance
+
+1. Log in to your AWS Management Console.
+2. Navigate to the EC2 Dashboard.
+3. Click on "Launch Instance" and choose a Windows Server AMI.
+4. Follow the wizard to configure the instance, selecting your desired instance type, 
+security group, and key pair. Ensure that you allow incoming traffic on port 80 or 443 or you can add your own port no-(like in my case it was 5000)and you should allow it 
+from anywhere eg-(0.0.0.0.0) IP-address so that anyone can access the server from anywhere and any machine.  
+
+## Step 2: Connect to Your EC2 Instance
+
+1. Now got to your instance which will be in running state within minutes.
+
+2. Now click on on your instance and click connect . And click on RDP client now click on get password , now it will ask to upload your private key which you have made 
+during launching instance in key-pair section , now upload it and click on decrypt password . It will decrypt password and go back now open remote desktop connection 
+on your local machine now add your public ip address at the  computer input field , now it will ask for username and password which you can copy from RDP client box and allow 
+access to create virtual ec2 instance on your local machine.
+
+3. Now as your virtual machine is created and you are logged in as an Administrator , you have to firstly open any browser and install node.js,git and git bash on your 
+ec2 machine now when it is installed open git bash and clone your Node.js application from github 
+as : git clone https://github.com/Bajpai25/employee_backend
+
+4.) Install project dependencies using npm or yarn:
+npm install
+
+yarn install
+
+5.) Development To start the development server, run the following command: 
+node app.js OR nodemon app.js onto your git bash
+
+6.) It should display Connected to 5000 and Connected indicating that your server is running perfectly .
+
+7.) Now run your localhost onto your browser to view the backend data and to view that the server is running perfectly or not.
+
+8.) Now go to your local machine aws instance section on your selected instance on the bottom right corner you could see the 
+Public IPv4 DNS
+ ec2-3-111-31-17.ap-south-1.compute.amazonaws.com now copy it and paste it in your virtual ec2 instance browser 
+ec2-3-111-31-17.ap-south-1.compute.amazonaws.com:5000/getdata 
+now you can view your mongoDB database data
+Now you have to turn off your windows firewall settings so that the link could work in your external machine too .
+Now it would work and here is the deployed server URL : 
+http://ec2-3-111-31-17.ap-south-1.compute.amazonaws.com:5000/getdata
+
+Any necessary AWS configuration files (e.g., CloudFormation templates).
+
+I have used RDP Client not used AWS configuration but I can provide an approach on how to use AWS cloudformation. 
+
+If you've already deployed your Node.js application on an AWS EC2 instance using an RDP client and you didn't use AWS CloudFormation or other infrastructure-as-code tools
+to provision resources, you may not have specific AWS configuration files or CloudFormation templates related to your application deployment.
+
+AWS CloudFormation is typically used to define and provision AWS infrastructure resources such as EC2 instances, VPCs, databases, 
+load balancers, and more in a repeatable and automated manner. If you didn't use CloudFormation for your deployment and manually set up your EC2 instance and other resources, you may not have CloudFormation templates.
+
+However, if you decide to further automate or enhance your AWS infrastructure, you can create CloudFormation 
+templates to define your resources and their configurations. This will make it easier to manage and replicate your infrastructure in the future.
+Here's a basic example of how you might create a CloudFormation template for an EC2 instance:
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0c55b159cbfafe1f0  # Specify your desired Windows Server AMI ID
+      KeyName: MyKeyPair
+      SecurityGroupIds:
+        - sg-0123456789abcdef0  # Specify your security group ID
+      SubnetId: subnet-0123456789abcdef0  # Specify your subnet ID
+
+In this example, you define an EC2 instance with its properties, such as instance type, image ID, key pair, security groups, and subnet.
+
+If you plan to add other AWS services like an RDS database, an S3 bucket for storage, or an Elastic Load Balancer (ELB) in the future, you can expand your CloudFormation template to include those resources.
+
+Keep in mind that CloudFormation templates are best used for infrastructure provisioning and management. For your Node.js application's deployment and 
+configuration, you may want to explore other deployment and orchestration options, such as Docker containers, CI/CD pipelines, 
+and configuration management tools like AWS Elastic Beanstalk or AWS OpsWorks, depending on your specific needs and scale.
